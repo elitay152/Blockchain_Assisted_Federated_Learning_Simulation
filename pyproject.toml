@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flower-blockchain-fl"
+version = "1.0.0"
+description = "Flower federated learning simulation with blockchain audit logging"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "flwr[simulation]",
+    "pandas",
+    "scikit-learn",
+    "joblib",
+    "ucimlrepo",
+    "numpy"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["flwr_app", "ml"]
+
+[tool.flwr.app]
+publisher = "eli"
+
+[tool.flwr.app.components]
+serverapp = "flwr_app.server_app:app"
+clientapp = "flwr_app.client_app:app"
