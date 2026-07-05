@@ -1,57 +1,169 @@
-# Sample Hardhat 3 Beta Project (`node:test` and `viem`)
+# Blockchain-Supported Federated Learning Simulation for Healthcare
 
-This project showcases a Hardhat 3 Beta project using the native Node.js test runner (`node:test`) and the `viem` library for Ethereum interactions.
+This project demonstrates how blockchain can support auditability, reputation tracking, and incentive mechanisms in a federated learning workflow. It combines a multi-client federated learning simulation with Ethereum smart contracts that log model updates, performance metrics, model hashes, client reputation, and token-based rewards.
 
-To learn more about the Hardhat 3 Beta, please visit the [Getting Started guide](https://hardhat.org/docs/getting-started#getting-started-with-hardhat-3). To share your feedback, join our [Hardhat 3 Beta](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group or [open an issue](https://github.com/NomicFoundation/hardhat/issues/new) in our GitHub issue tracker.
+The project was developed as part of doctoral coursework exploring privacy-preserving machine learning, federated learning governance, and secure healthcare data collaboration.
 
 ## Project Overview
 
-This example project includes:
+Federated learning allows multiple organizations to collaboratively train machine learning models without directly sharing raw data. This project simulates that process using multiple local clients and a central federated learning coordinator. Blockchain is used as an audit and governance layer to record training activity and support transparent tracking of client contributions.
 
-- A simple Hardhat configuration file.
-- Foundry-compatible Solidity unit tests.
-- TypeScript integration tests using [`node:test`](nodejs.org/api/test.html), the new Node.js native test runner, and [`viem`](https://viem.sh/).
-- Examples demonstrating how to connect to different types of networks, including locally simulating OP mainnet.
+The system includes:
 
-## Usage
+* Multi-client federated learning simulation
+* Flower-based federated averaging workflow
+* Python machine learning pipeline
+* Ethereum smart contract for model update logging
+* Client reputation and token reward tracking
+* SHA-256 model hash generation for provenance
+* Automated JSON export and PDF reporting
+* Hardhat-based smart contract testing and deployment
 
-### Running Tests
+## Tech Stack
 
-To run all the tests in the project, execute the following command:
+**Machine Learning & Data Processing**
 
-```shell
+* Python
+* Flower
+* PyTorch / scikit-learn
+* pandas
+* NumPy
+* joblib
+
+**Blockchain**
+
+* Solidity
+* Hardhat 3
+* Ethereum local development network
+* viem
+* TypeScript
+
+**Automation & Reporting**
+
+* Python scripts
+* ReportLab
+* JSON exports
+* Node.js test runner
+
+## Key Features
+
+### Federated Learning Simulation
+
+The project simulates multiple clients training locally on separate datasets. Model updates are aggregated through a federated learning workflow, allowing collaborative model improvement without direct raw data sharing.
+
+### Blockchain Audit Logging
+
+Each submitted model update can be logged to a smart contract with metadata such as:
+
+* Client ID
+* Round number
+* Model version
+* Performance metric
+* Model hash
+* Submission address
+* Acceptance status
+* Reputation change
+* Token reward amount
+
+### Reputation and Rewards
+
+The smart contract tracks client participation and contribution quality through reputation scores and token-based rewards. This demonstrates how blockchain can support incentive mechanisms in federated learning environments.
+
+### Automated Workflow
+
+The project includes scripts for:
+
+* Preparing client datasets
+* Running federated learning rounds
+* Exporting model update metadata
+* Submitting updates to the blockchain
+* Checking logged updates and client reputation
+* Generating a summary report
+
+## Project Structure
+
+```text
+contracts/              Solidity smart contracts
+ignition/modules/       Hardhat Ignition deployment modules
+scripts/                TypeScript blockchain interaction scripts
+test/                   Smart contract tests
+ml/                     Python ML and reporting workflow
+flwr_app/               Flower federated learning application
+clients/                Local simulated client data and outputs
+```
+
+## Running the Project
+
+Install dependencies for the Hardhat project:
+
+```bash
+npm install
+```
+
+Create and activate a Python virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+On Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+On macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+Install Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run smart contract tests:
+
+```bash
 npx hardhat test
 ```
 
-You can also selectively run the Solidity or `node:test` tests:
+Start a local Hardhat node:
 
-```shell
-npx hardhat test solidity
-npx hardhat test nodejs
+```bash
+npx hardhat node
 ```
 
-### Make a deployment to Sepolia
+Deploy the smart contract locally:
 
-This project includes an example Ignition module to deploy the contract. You can deploy this module to a locally simulated chain or to Sepolia.
-
-To run the deployment to a local chain:
-
-```shell
-npx hardhat ignition deploy ignition/modules/Counter.ts
+```bash
+npx hardhat ignition deploy ignition/modules/FederatedTrainingCoordinator.ts --network localhost
 ```
 
-To run the deployment to Sepolia, you need an account with funds to send the transaction. The provided Hardhat configuration includes a Configuration Variable called `SEPOLIA_PRIVATE_KEY`, which you can use to set the private key of the account you want to use.
+Run the Python federated learning workflow:
 
-You can set the `SEPOLIA_PRIVATE_KEY` variable using the `hardhat-keystore` plugin or by setting it as an environment variable.
-
-To set the `SEPOLIA_PRIVATE_KEY` config variable using `hardhat-keystore`:
-
-```shell
-npx hardhat keystore set SEPOLIA_PRIVATE_KEY
+```bash
+python ml/run_full_project.py
 ```
 
-After setting the variable, you can run the deployment with the Sepolia network:
+Check submitted model updates:
 
-```shell
-npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
+```bash
+npx hardhat run scripts/checkUpdates.ts --network localhost
 ```
+
+Check client reputation:
+
+```bash
+npx hardhat run scripts/checkReputation.ts --network localhost
+```
+
+## Limitations
+
+This project is a simulation and proof of concept. The federated learning workflow uses a central coordinator, and blockchain is used for audit logging, reputation tracking, and incentives rather than fully decentralized model aggregation. Future work could explore decentralized coordination, on-chain validation, stronger privacy protections, and production-grade deployment patterns.
+
+## Purpose
+
+The goal of this project is to explore how federated learning, blockchain, and healthcare data governance concepts can be combined to support more transparent and accountable machine learning collaboration across organizations.
